@@ -4,20 +4,21 @@ from log_reg_categorizer import LogRegCategorizer
 from elasticsearch import Elasticsearch
 import string
 
-
 type_hier = load_type_hierarchy('./smart_dataset/evaluation/dbpedia/dbpedia_types.tsv')
 es = Elasticsearch()
 
 INDEX_NAME = 'ec_index'
 
-
-test_questions = json.load(open('./data/smarttask_dbpedia_test_questions.json'))
+train_questions = json.load(open('./data/smarttask_dbpedia_train.json'))
 lrc = LogRegCategorizer('./data/smarttask_dbpedia_train.json')
 baseline_output = list()
 
-for question in test_questions:
+for question in train_questions:
     q_id = question['id']
     q_text = question['question']
+    q_text = question['question']
+    if q_text == None:
+        continue
     q_cat = lrc.predict([q_text])[0]
     if q_cat == 'boolean':
         q_type = ['boolean']
